@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:ipssiaa3bd2022firstapplication/Model/Utilisateur.dart';
 
 class FirestoreHelper{
 
@@ -30,6 +31,24 @@ class FirestoreHelper{
        };
        addUser(uid, map);
 
+    }
+
+     Future <Utilisateur> connectUser(String mail , String password) async {
+        UserCredential resultat =  await auth.signInWithEmailAndPassword(email: mail, password: password);
+        String uid = resultat.user!.uid;
+        return getUser(uid);
+
+    }
+
+
+    Future <Utilisateur> getUser( String uid) async {
+      DocumentSnapshot snapshot = await fire_users.doc(uid).get();
+      return Utilisateur(snapshot);
+
+    }
+
+    String getIdentifant(){
+      return auth.currentUser!.uid;
     }
 
 

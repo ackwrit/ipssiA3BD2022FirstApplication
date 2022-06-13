@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ipssiaa3bd2022firstapplication/Services/FirestoreHelper.dart';
 import 'package:ipssiaa3bd2022firstapplication/View/dashBoard.dart';
 
 void main() {
@@ -44,6 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String mail = "";
   String password = "";
+  String  prenom = "";
+  String nom = "";
+  DateTime birthday = DateTime.now();
+  bool isregister = true;
+  List<bool> selection = [true,false];
 
 
 
@@ -83,6 +89,73 @@ class _MyHomePageState extends State<MyHomePage> {
               )
           ),
         ),
+        const SizedBox(height : 10),
+        //Choix pour l'utilisateur
+        ToggleButtons(
+            children: const [
+              Text("Inscription"),
+              Text("Connexion")
+            ],
+            isSelected: selection,
+          onPressed: (index){
+              if(index == 0){
+                  selection[0] = true;
+                  selection[1] = false;
+                  isregister = true;
+              }
+              else
+                {
+                  selection[0] = false;
+                  selection[1] = true;
+                  isregister = false;
+                }
+
+          },
+        ),
+
+        //Afficher le nom suivant les différents cas
+        (isregister) ? TextField(
+            decoration : InputDecoration(
+                hintText : "Entrer votre nom",
+                border : OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20)
+                )
+            ),
+            onChanged : (String value){
+              setState((){
+                nom = value;
+              });
+
+
+
+
+            }
+
+        ): Container(),
+
+
+
+
+
+        (isregister) ? TextField(
+            decoration : InputDecoration(
+                hintText : "Entrer votre prénom",
+                border : OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20)
+                )
+            ),
+            onChanged : (String value){
+              setState((){
+                prenom = value;
+              });
+
+
+
+
+            }
+
+        ): Container(),
+
 
 
 
@@ -146,18 +219,61 @@ class _MyHomePageState extends State<MyHomePage> {
 
         ElevatedButton(
             onPressed : (){
-              print("J'ai appuyé");
-              print(mail);
-              Navigator.push(context,MaterialPageRoute(
-                  builder : (context){
-                    return dashBoard(email : mail, epassword : password);              }
-              ));
+              if(isregister == true){
+                //fonction pour s'inscrire
+                inscription();
+              }
+              else{
+                // Fonction pour se connecter
+                connexion();
+              }
+              
+            
             },
-            child : const Text("Connexion")
+            child : Text("Validation")
 
         )
 
       ],
     );
   }
+  
+  
+  //Fonction 
+  inscription(){
+     FirestoreHelper().createUser(nom, birthday, password, mail, prenom).then((value){
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context){
+              return dashBoard(email: mail, epassword: password);
+            }
+        ));
+       
+       
+     }).catchError((error){
+       //Par exemple une perte de connexion
+       print(error);
+       
+     });
+    
+  }
+  
+  
+  
+  connexion(){
+    FirestoreHelper().connectUser(mail, password).then((value){
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context){
+            return dashBoard(email: mail, epassword: password);
+          }
+      ));
+
+    }).catchError((error){
+      //Afficher Pop connexion échoué
+    });
+    
+  }
+
+
+
+
 }
