@@ -49,27 +49,39 @@ class dashboardState extends State<dashBoard>{
               //
               List documents = snapshot.data!.docs;
               return ListView.builder(
+                //gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                 padding: EdgeInsets.all(20),
                 itemCount: documents.length,
                 itemBuilder: (context,index){
                   Utilisateur user = Utilisateur(documents[index]);
                   if(GlobalUser.id != user.id) {
-                    return Card(
-                      elevation: 10,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: ListTile(
-                        onTap: () {
-                          //Détail de l'utilisateur
-                        },
-                        title: Text(user.nomComplet()),
-                        subtitle: Text(user.pseudo!),
-                        leading: Image.network(user.avatar!),
-                        trailing: Text(user.mail),
-                      ),
+                    return Dismissible(
 
+                      direction: DismissDirection.endToStart,
+                        onDismissed: (DismissDirection direction){
+                          FirestoreHelper().deleteUser(user.id);
+                        },
+                        key: Key(user.id),
+
+                        child: Card(
+                          elevation: 10,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: ListTile(
+                            onTap: () {
+                              //Détail de l'utilisateur
+
+                            },
+                            title: Text(user.nomComplet()),
+                            subtitle: Text(user.pseudo!),
+                            leading: Image.network(user.avatar!),
+                            trailing: Text(user.mail),
+                          ),
+
+                        ),
                     );
+
                   }
                   else
                     {

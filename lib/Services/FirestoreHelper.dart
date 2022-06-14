@@ -64,6 +64,10 @@ class FirestoreHelper{
       fire_users.doc(uid).update(map);
     }
 
+    deleteUser(String uid){
+      fire_users.doc(uid).delete();
+    }
+
     Future <String> stockageImage(Uint8List bytes, String name) async {
       String nameFinal = name+getIdentifant();
       String url ="";
