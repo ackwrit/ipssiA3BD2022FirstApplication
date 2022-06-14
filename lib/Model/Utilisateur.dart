@@ -47,6 +47,18 @@ class Utilisateur {
 
   }
 
+  //Deuxième constructeur qui affecter les valeurs à vide
+Utilisateur.empty(){
+    id = "";
+    nom ="";
+    prenom="";
+    mail ="";
+    avatar ="";
+    pseudo ="";
+    birthday = DateTime.now();
+}
+
+
 
 
 
