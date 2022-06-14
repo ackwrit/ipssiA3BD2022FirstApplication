@@ -21,6 +21,8 @@ class MyDrawerState extends  State<MyDrawer>{
   String? nomImage;
   String? urlImage;
   Uint8List? bytesImage;
+  bool isEditing = false;
+  String pseudoTempo="";
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +61,34 @@ class MyDrawerState extends  State<MyDrawer>{
 
                    onPressed: (){
 
+                     if (isEditing == true){
+                       setState(() {
+                         GlobalUser.pseudo = pseudoTempo;
+                         Map<String,dynamic> map = {
+                           "PSEUDO": pseudoTempo
+                         };
+                         FirestoreHelper().updateUser(GlobalUser.id, map);
+                       });
+
+                     }
+                     setState(() {
+                       isEditing = !isEditing;
+                     });
+
                    } ,
-                   icon: const Icon(Icons.edit),
-                   label: Text(GlobalUser.pseudo!)
+                   icon: (isEditing)?const Icon(Icons.check,color: Colors.green,):const Icon(Icons.edit),
+                   label: (isEditing)?TextField(
+                     decoration: const InputDecoration(
+                       hintText: "Entrer le pseudo",
+                     ),
+                     onChanged: (newValue){
+                       setState(() {
+                         pseudoTempo=newValue;
+                       });
+                     },
+
+                   ):
+                   Text(GlobalUser.pseudo!)
                ),
 
 

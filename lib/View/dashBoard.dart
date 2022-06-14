@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ipssiaa3bd2022firstapplication/Model/Utilisateur.dart';
+import 'package:ipssiaa3bd2022firstapplication/Services/FirestoreHelper.dart';
 import 'package:ipssiaa3bd2022firstapplication/Services/librairie.dart';
 import 'package:ipssiaa3bd2022firstapplication/View/MyDrawer.dart';
 
@@ -28,9 +31,60 @@ class dashboardState extends State<dashBoard>{
         backgroundColor: Colors.green,
       ),
       backgroundColor: Colors.yellow,
-      body : Center(
-          child : Text("${GlobalUser.id}")
-      ),
+      body : bodyPage()
+    );
+  }
+
+  Widget bodyPage(){
+    return StreamBuilder<QuerySnapshot>(
+        //On cherche tous les documentssnpshots de l'utilisateur dans la bdd
+        stream: FirestoreHelper().fire_users.snapshots(),
+        builder: (context, snapshot){
+          if(!snapshot.hasData){
+            // Il n'y aucune donnée dans la BDD
+            return const CircularProgressIndicator.adaptive();
+          }
+          else
+            {
+              //
+              List documents = snapshot.data!.docs;
+              return ListView.builder(
+                padding: EdgeInsets.all(20),
+                itemCount: documents.length,
+                itemBuilder: (context,index){
+                  Utilisateur user = Utilisateur(documents[index]);
+                  if(GlobalUser.id != user.id) {
+                    return Card(
+                      elevation: 10,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        onTap: () {
+                          //Détail de l'utilisateur
+                        },
+                        title: Text(user.nomComplet()),
+                        subtitle: Text(user.pseudo!),
+                        leading: Image.network(user.avatar!),
+                        trailing: Text(user.mail),
+                      ),
+
+                    );
+                  }
+                  else
+                    {
+                      return Container();
+                    }
+                    
+                    
+                    
+                  
+                },
+
+
+              );
+            }
+        }
     );
   }
 }
