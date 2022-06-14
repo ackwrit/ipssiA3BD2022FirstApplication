@@ -16,6 +16,7 @@ class Utilisateur {
 
 
 
+
   //Constructeur
   Utilisateur(DocumentSnapshot snapshot){
     String? provisoire;
@@ -56,6 +57,11 @@ Utilisateur.empty(){
     avatar ="";
     pseudo ="";
     birthday = DateTime.now();
+}
+
+
+String nomComplet(){
+    return prenom + " " + nom;
 }
 
 
