@@ -259,7 +259,11 @@ class _MyHomePageState extends State<MyHomePage> {
   //Fonction 
   inscription(){
      FirestoreHelper().createUser(nom, birthday, password, mail, prenom).then((value){
-        Navigator.push(context, MaterialPageRoute(
+       setState(() {
+         GlobalUser = value;
+       });
+
+       Navigator.push(context, MaterialPageRoute(
             builder: (context){
               return dashBoard();
             }
@@ -280,13 +284,16 @@ class _MyHomePageState extends State<MyHomePage> {
     FirestoreHelper().connectUser(mail, password).then((value){
       setState(() {
         GlobalUser = value;
-      });
+
+
 
       Navigator.push(context, MaterialPageRoute(
           builder: (context){
             return dashBoard();
           }
       ));
+      });
+
 
     }).catchError((error){
       //Afficher Pop connexion échoué

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ipssiaa3bd2022firstapplication/Services/global.dart';
 
 class MyDrawer extends StatefulWidget{
   @override
@@ -15,7 +16,39 @@ class MyDrawerState extends  State<MyDrawer>{
     // TODO: implement build
     return Container(
       padding: EdgeInsets.all(20),
-      child: const Text("Je suis dans le drawer"),
+      child:  Center(
+        child: Column(
+          children: [
+            //Avatar cliquable
+            Container(
+              height: 50,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(GlobalUser.avatar!)
+                ),
+              ),
+
+            ),
+
+
+
+            //Pseudo qui pourra changer
+
+
+            // nom et prénom complet
+
+
+            // adresee mail
+
+
+            //Date de naissnace
+
+
+
+          ],
+        ),
+      ),
     );
   }
 

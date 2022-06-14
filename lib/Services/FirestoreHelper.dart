@@ -16,7 +16,7 @@ class FirestoreHelper{
 
 
    //Méthodes
-    Future createUser(String nom, DateTime birthday, String password, String mail, String prenom) async {
+    Future <Utilisateur> createUser(String nom, DateTime birthday, String password, String mail, String prenom) async {
        UserCredential resultat = await auth.createUserWithEmailAndPassword(email: mail, password: password);
        User userFirebase = resultat.user!;
        String uid = userFirebase.uid;
@@ -30,6 +30,7 @@ class FirestoreHelper{
 
        };
        addUser(uid, map);
+       return getUser(uid);
 
     }
 
